@@ -15,7 +15,8 @@ def runCode(algo):
         for (key, val) in algo.items():
             for size in val:
                 ran = "".join(random.choices(string.ascii_lowercase  + string.ascii_uppercase + string.digits, k=size))
-                f = open(key + i + "_" + str(size), "w")
+                f = open(key + str(i) + "_" + str(size), "w")
                 f.write(str(ran))
                 f.close()
 
+runCode(algo)
