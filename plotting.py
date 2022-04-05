@@ -6,32 +6,51 @@ import matplotlib.pyplot as plt
 from processor import process_aes, process_rsa, process_sha
 
 
-def print_result(algo, test_times, detailed = False):
-    print(algo)
+def plot_result(algo, test_times):
+    x=[]
+    y=[]
+    max_key = 0
+    max_time = 0
     for size, times in test_times.items():
+        max_key = size if size > max_key else max_key
+        max_time = size if size > max_time else max_time
+        x.append(size)
         avg_c = 0
         avg = 0
 
-        print('\t', size)
         for time in times:
             avg_c += 1
             avg += time
-            if detailed:
-                print('\n\t\t', time)
-        if detailed:
-            print('\t\taverage:')
 
-        print('\t\t', avg/avg_c)
+        y.append(avg/avg_c)
 
+    #plt.style.use('_mpl-gallery')
+    fig, ax = plt.subplots()
 
-def main():
+    ax.plot(x, y, linewidth=2.0)
+    ax.set(title = algo,
+            xlim=(0, max_key), #xticks=np.arange(1, max_key, max_key/10),
+            ylim=(0, max_time), ) #yticks=np.arange(1, max_time, max_time/10))
+
+    #ax.set(xlim = (0,8), xticks=test_times.keys(), 
+            #ylim = (0,8), yticks=np.arrange(1, 8))
+
+    plt.show()
+
+def plot_all():
     aes_enc, aes_dec = process_aes()
     rsa_enc, rsa_dec = process_rsa()
     sha_dig = process_sha()
 
+    plot_result('AES Encryption', aes_enc)
+    plot_result('AES Decryption', aes_dec)
+    plot_result('RSA Encryption', rsa_enc)
+    plot_result('RSA Decryption', rsa_dec)
+    plot_result('SHA Digest', sha_dig)
+
 
 if __name__ == '__main__':
-    main()
+    plot_all()
 
 
 """
