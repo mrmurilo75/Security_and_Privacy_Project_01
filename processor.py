@@ -15,7 +15,6 @@ import timeit
 
 from generator import generate_algo, TEST_FILES_DIR
 
-
 _MS = 1000
 _uS = 1000000
 
@@ -27,8 +26,6 @@ encryption = {
 
 key = urandom (32)
 iv = urandom (16)
-
-# print( hexlify(key), hexlify(iv) )
 
 def aes_encrypt(message, encryptor):
     return encryptor.update(message) + encryptor.finalize()
@@ -45,6 +42,7 @@ def rsa_encrypt(message, key):
                 label=None
             )
         )
+
 def rsa_decrypt(ciphertext, key):
     return key.decrypt(
             ciphertext,
@@ -58,7 +56,6 @@ def rsa_decrypt(ciphertext, key):
 def sha_digest(message, digest):
     digest.update(message)
     digest.finalize()
-
 
 def process_sha():
     algo = 'sha'
@@ -76,7 +73,6 @@ def process_sha():
             digest_times[size].append( hashing )
 
     return digest_times
-
 
 def process_rsa():
     algo = 'rsa'
@@ -103,7 +99,6 @@ def process_rsa():
             decrypt_times[size].append( decrypt )
 
     return ( encrypt_times, decrypt_times )
-
 
 def process_aes():
     algo = 'aes'
@@ -132,7 +127,6 @@ def process_aes():
 
     return ( encrypt_times, decrypt_times )
 
-
 def print_result(algo, test_times, detailed = False):
     print(algo)
     for size, times in test_times.items():
@@ -150,7 +144,6 @@ def print_result(algo, test_times, detailed = False):
 
         print('\t\t', avg/avg_c)
 
-
 def process_all_avg():
     aes_enc, aes_dec = process_aes()
     rsa_enc, rsa_dec = process_rsa()
@@ -161,7 +154,6 @@ def process_all_avg():
     print_result('RSA Encryption', rsa_enc)
     print_result('RSA Decryption', rsa_dec)
     print_result('SHA Digest', sha_dig)
-
 
 if __name__ == '__main__':
     process_all_avg()

@@ -2,7 +2,6 @@ import string
 import random
 import os
 
-
 _TEST_FILES_DIR = 'test_files'
 TEST_FILES_DIR = _TEST_FILES_DIR if os.path.isdir(_TEST_FILES_DIR) else (os.mkdir(_TEST_FILES_DIR) or _TEST_FILES_DIR)
 
@@ -35,11 +34,9 @@ def generate_algo(key, force=False):
 
     return generated_files
 
-
 def generate(algo):
     for key in algo:
         generate_algo(key, force=True)
-
 
 if __name__ == '__main__': 
     generate(algo)
