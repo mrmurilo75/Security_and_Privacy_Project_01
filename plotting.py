@@ -12,8 +12,6 @@ def plot_result(algo, test_times):
     max_key = 0
     max_time = 0
     for size, times in test_times.items():
-        max_key = size if size > max_key else max_key
-        max_time = size if size > max_time else max_time
         x.append(size)
         avg_c = 0
         avg = 0
@@ -24,13 +22,19 @@ def plot_result(algo, test_times):
 
         y.append(avg/avg_c)
 
-    #plt.style.use('_mpl-gallery')
+    # plt.style.use('_mpl-gallery')
     fig, ax = plt.subplots()
+
+    x = np.arange(len(list(test_times.keys())))
+    xlabels = list(test_times.keys())
+
+    print(xlabels)
+    # print(xlist)
 
     ax.plot(x, y, linewidth=2.0)
     ax.set(title = algo,
-            xlim=(0, max_key), #xticks=np.arange(1, max_key, max_key/10),
-            ylim=(0, max_time), ) #yticks=np.arange(1, max_time, max_time/10))
+            xticks=x, xticklabels=xlabels, xlabel="Syze (in bytes)",
+            ylabel="Time (in microseconds)") #yticks=np.arange(1, max_time, max_time/10))
 
     #ax.set(xlim = (0,8), xticks=test_times.keys(), 
             #ylim = (0,8), yticks=np.arrange(1, 8))
