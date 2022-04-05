@@ -1,4 +1,5 @@
 import os
+import asyncio
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -6,7 +7,7 @@ import matplotlib.pyplot as plt
 from processor import process_aes, process_rsa, process_sha
 
 
-def plot_result(algo, test_times):
+async def plot_result(algo, test_times):
     x=[]
     y=[]
     max_key = 0
@@ -46,11 +47,11 @@ def plot_all():
     rsa_enc, rsa_dec = process_rsa()
     sha_dig = process_sha()
 
-    plot_result('AES Encryption', aes_enc)
-    plot_result('AES Decryption', aes_dec)
-    plot_result('RSA Encryption', rsa_enc)
-    plot_result('RSA Decryption', rsa_dec)
-    plot_result('SHA Digest', sha_dig)
+    asyncio.run(plot_result('AES Encryption', aes_enc))
+    asyncio.run(plot_result('AES Decryption', aes_dec))
+    asyncio.run(plot_result('RSA Encryption', rsa_enc))
+    asyncio.run(plot_result('RSA Decryption', rsa_dec))
+    asyncio.run(plot_result('SHA Digest', sha_dig))
 
 
 if __name__ == '__main__':
