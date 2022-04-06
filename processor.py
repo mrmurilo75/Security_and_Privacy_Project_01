@@ -15,6 +15,7 @@ import timeit
 
 from generator import generate_algo, TEST_FILES_DIR
 
+RUN_TIMES = 100
 _MS = 1000
 _uS = 1000000
 
@@ -27,10 +28,14 @@ encryption = {
 key = urandom (32)
 iv = urandom (16)
 
-def aes_encrypt(message, encryptor):
+def aes_encrypt(message):
+    cipher = Cipher( algorithms.AES(key), modes.CTR(iv) )
+    encryptor = cipher.encryptor()
     return encryptor.update(message) + encryptor.finalize()
 
-def aes_decrypt(ciphertext, decryptor):
+def aes_decrypt(ciphertext):
+    cipher = Cipher( algorithms.AES(key), modes.CTR(iv) )
+    decryptor = cipher.decryptor()
     return decryptor.update(ciphertext) + decryptor.finalize()
 
 def rsa_encrypt(message, key):
@@ -53,7 +58,8 @@ def rsa_decrypt(ciphertext, key):
             )
         )
 
-def sha_digest(message, digest):
+def sha_digest(message):
+    digest = hashes.Hash(hashes.SHA256())
     digest.update(message)
     digest.finalize()
 
@@ -67,8 +73,7 @@ def process_sha():
         for test_file in test_files:
             with open(os.path.join(TEST_FILES_DIR, test_file), 'rb') as ff:
                 message = ff.read()
-                digest = hashes.Hash(hashes.SHA256())
-                hashing = timeit.timeit(lambda: sha_digest(message, digest), number=1)*_uS
+                hashing = timeit.timeit(lambda: sha_digest(message), number=RUN_TIMES)*_uS/RUN_TIMES
 
             digest_times[size].append( hashing )
 
@@ -91,9 +96,9 @@ def process_rsa():
                         key_size = 2048
                     )
                 public_key = private_key.public_key()
-                encrypt = timeit.timeit(lambda: rsa_encrypt(message, public_key), number=1)*_uS
+                encrypt = timeit.timeit(lambda: rsa_encrypt(message, public_key), number=RUN_TIMES)*_uS/RUN_TIMES
                 ciphertext = rsa_encrypt(message, public_key)
-                decrypt = timeit.timeit(lambda: rsa_decrypt(ciphertext, private_key), number=1)*_uS
+                decrypt = timeit.timeit(lambda: rsa_decrypt(ciphertext, private_key), number=RUN_TIMES)*_uS/RUN_TIMES
 
             encrypt_times[size].append( encrypt )
             decrypt_times[size].append( decrypt )
@@ -112,15 +117,11 @@ def process_aes():
         for test_file in test_files:
             with open(os.path.join(TEST_FILES_DIR, test_file), 'rb') as ff:
                 message = ff.read()
-                cipher = Cipher( algorithms.AES(key), modes.CTR(iv) )
 
-                encryptor = cipher.encryptor()
-                encrypt = timeit.timeit(lambda: aes_encrypt(message, encryptor), number=1)*_uS # Timeit can't see global variables, so the arguments must be passed
+                encrypt = timeit.timeit(lambda: aes_encrypt(message), number=RUN_TIMES)*_uS/RUN_TIMES # Timeit can't see global variables, so the arguments must be passed
 
-                encryptor = cipher.encryptor() # Context finalizes after encryptor is used. Another one has to be generated so we have ciphertext to pass to decryption
-                ciphertext = aes_encrypt(message, encryptor)
-                decryptor = cipher.decryptor()
-                decrypt = timeit.timeit(lambda: aes_decrypt(ciphertext, decryptor), number=1)*_uS
+                ciphertext = aes_encrypt(message)
+                decrypt = timeit.timeit(lambda: aes_decrypt(ciphertext), number=RUN_TIMES)*_uS/RUN_TIMES
 
             encrypt_times[size].append( encrypt )
             decrypt_times[size].append( decrypt )

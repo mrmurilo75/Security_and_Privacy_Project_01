@@ -19,14 +19,16 @@ async def plot_result(algo, test_times):
         y.append(avg/avg_c)
 
     fig, ax = plt.subplots()
+    plt.grid()
 
     x = np.arange(len(list(test_times.keys())))
     xlabels = list(test_times.keys())
 
+
     ax.plot(x, y, linewidth=2.0)
     ax.set(title = algo,
-            xticks=x, xticklabels=xlabels, xlabel="Syze (in bytes)",
-            ylabel="Time (in microseconds)")
+            xticks=x, xticklabels=xlabels, xlabel="Size (bytes)",
+            ylabel="Time (microseconds)")
 
     plt.show()
 

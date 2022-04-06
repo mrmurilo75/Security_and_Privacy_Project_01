@@ -5,7 +5,7 @@ import os
 _TEST_FILES_DIR = 'test_files'
 TEST_FILES_DIR = _TEST_FILES_DIR if os.path.isdir(_TEST_FILES_DIR) else (os.mkdir(_TEST_FILES_DIR) or _TEST_FILES_DIR)
 
-TEST_LIMIT = 10
+TEST_LIMIT = 50
 
 algo = {
     "aes" : [8, 64, 512, 4096, 32768, 262144, 2047152],
